@@ -8,14 +8,15 @@ namespace SigmaTask7.Task2
     class Dishes
     {
         //матиме два словника
-        //назва страви, і словник по продуктам і їхнім вагам
-        Dictionary<string, Dictionary<string, double>> menu;
-        Dictionary<string, double> priceList; 
+        //перший зберігає продукти і їх ваги
+        Dictionary<string, double> products;
+        //другий продукт і його вартість
+        Dictionary<string, double> productsPrice; 
 
         public Dishes(string pricePath ="N/A", string dishesPath = "N/A")
         {
-            menu = new Dictionary<string, Dictionary<string, double>>();
-            priceList = new Dictionary<string, double>();
+            products = new Dictionary<string, double>();
+            productsPrice = new Dictionary<string, double>();
             ReadPricesFromFile(pricePath);
             ReadDishesFromFile(dishesPath);
         }
@@ -35,13 +36,14 @@ namespace SigmaTask7.Task2
                             string[] splitLine = line.Split();
                             if (splitLine.Length != 2)
                                 throw new ArgumentException("Wrong input info");
+
                             double priceOfProduct;
-                            if (!Double.TryParse(splitLine[0], out priceOfProduct) || (priceOfProduct <= 0))
+                            if (!Double.TryParse(splitLine[1], out priceOfProduct) || (priceOfProduct <= 0))
                                 throw new ArgumentException("Wrong Price of product");
                             //добавляємо
-                            priceList[splitLine[0]] = priceOfProduct;
+                            productsPrice[splitLine[0]] = priceOfProduct;
                         }
-                    }    
+                    }
                 }
                 else throw new FileNotFoundException("File not found");
             }
@@ -67,25 +69,32 @@ namespace SigmaTask7.Task2
                         string line;
                         while((line = reader.ReadLine())!=null)
                         {
+                            //Console.WriteLine(line);
                             //якщо не букви, то протустити
-                            if (!Char.IsLetter(line[0]))
+                            if (line.Length ==0)
                                 continue;
 
                             string[] lineSplit = line.Split();
-
-                            //тимчасові змінні
-                            string dishName;
-                            KeyValuePair<string, double> temp;
-                            //якщо одне слово - це страва
-                            //запам'ятовуємо її
+                            //якщо 1 слово, це назва страви
                             if(lineSplit.Length == 1)
-                            {
-                                dishName = lineSplit[0];
-                            }
+                                continue;
+                            
                             //ідуть пари для продуктів і ваги
-                            if (lineSplit.Length == 2)
+                            else if (lineSplit.Length == 2)
                             {
                                 double weight;
+                                if (!Double.TryParse(lineSplit[1], out weight) || (weight <= 0))
+                                    throw new ArgumentException("wrong weight");
+
+                                if(!products.ContainsKey(lineSplit[0]))
+                                {
+                                    products[lineSplit[0]] = weight;
+                                }
+                                //якщо вже існує, збільшити вагу, кільки продутку взяли
+                                else
+                                {
+                                    products[lineSplit[0]] += weight;
+                                }
                             }
                             else
                                 throw new ArgumentException("Wrong input data");
@@ -105,5 +114,22 @@ namespace SigmaTask7.Task2
 
         }
 
+        public override string ToString()
+        {
+            string res = "";
+            try
+            {
+                foreach (var item in products)
+                {
+                    res += string.Format("Name: {0}\tTotal weight: {1:f2}kg\tTotal price: {2:f2}$\n", item.Key, item.Value,
+                        productsPrice[item.Key] * item.Value);
+                }
+            }
+            catch (KeyNotFoundException ex)
+            {
+                res = ex.Message;
+            }
+            return res;
+        }
     }
 }
