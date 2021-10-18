@@ -13,9 +13,11 @@ namespace SigmaTask7
             Console.WriteLine("Curent text:\n{0}", text2);
             Console.WriteLine("Changed text:\n{0}", voc.ChangeText(text2));
 
-
-
             Console.WriteLine("\nOur vocabulary:\n {0}",voc.ToString());
+
+
+
+
             Console.WriteLine("\nEnter to end");
             Console.ReadLine();
         }
