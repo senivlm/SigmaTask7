@@ -7,6 +7,7 @@ namespace SigmaTask7.Task1
     class Vocabulary
     {
         Dictionary<string, string> vocabulary;
+        Що за хардкод! де узагальнення
         public Vocabulary()
         {
             vocabulary = new Dictionary<string, string>();
@@ -34,7 +35,7 @@ namespace SigmaTask7.Task1
                     int wordLenght = 0;
                     //додатковий індексатор для проходу
                     int k = i;
-
+фолькльор
                     while (Char.IsLetter(text[k]))
                     {
                         wordLenght++;
