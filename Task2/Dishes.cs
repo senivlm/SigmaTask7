@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 
 namespace SigmaTask7.Task2
-{
+{А де main?
     class Dishes
     {
         //матиме два словника
@@ -59,7 +59,7 @@ namespace SigmaTask7.Task2
         }
 
         public void ReadDishesFromFile(string path)
-        {
+        {Ви тут і читаєте і одразу обчислюєте. Чи не краще розділити це на різні функції. Або ж адекватно називати метод.
             try
             {
                 if (File.Exists(path))
